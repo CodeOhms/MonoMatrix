@@ -1,0 +1,35 @@
+/*
+ * c_macros.h
+ *
+ *      Author: CodeOhms
+ *     Contact: codeohms@protonmail.com
+ *  Created on: 15 Nov. 2019
+ */
+
+
+#ifndef  C_MACROS_H
+#define  C_MACROS_H
+
+
+//Set by CMake
+#define ${PLATFORM}
+#define FRAME_QUEUE_SIZE ${FRAME_QUEUE_SIZE}
+#define FRAME_WIDTH      ${FRAME_WIDTH}
+#define FRAME_HEIGHT     ${FRAME_HEIGHT}
+
+
+#ifdef  MBED
+#include <stdint.h> //uint8_t
+#include <cstddef>  //size_t
+#endif //MBED
+
+
+namespace num
+{
+    #ifdef  MBED
+    typedef std::size_t size_t;
+    typedef uint8_t byte;
+    #endif //MBED
+}
+
+#endif //C_MACROS_H
