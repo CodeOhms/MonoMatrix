@@ -11,7 +11,7 @@
 #define   MATRIX_HANDLING_H
 
 
-#include "c_macros.h" //num::byte (uint8_t) and std::size_t
+#include "common.h" //num::byte (uint8_t) and std::size_t
 
 
 struct FrameQueue

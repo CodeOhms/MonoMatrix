@@ -9,7 +9,6 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <iostream>
 #include <bitset>
 #include <vector>
 
