@@ -20,6 +20,13 @@ void rowData(unsigned row, unsigned rowLength, array frame, array data)
         return (byteIndex / offsetSpan) % rowLength;
     };
 
+    auto shiftLeft = [&] (std::size_t dataIndex, std::size_t byteIndex, std::size_t shift) -> void {
+        data.arr[dataIndex] = frame.arr[byteIndex] << shift;
+    };
+    auto shiftRight = [&] (std::size_t dataIndex, std::size_t byteIndex, std::size_t shift) -> void {
+        data.arr[dataIndex] |= frame.arr[byteIndex] >> 8 - shift;
+    };
+
     if(byteSpan == 1)
     {
         data.arr[0] = frame.arr[atByte];
@@ -28,7 +35,7 @@ void rowData(unsigned row, unsigned rowLength, array frame, array data)
 
     // a)
     offset = offsetCalc(atByte);
-    data.arr[0] = frame.arr[atByte] << offset;
+    shiftLeft(0, atByte, offset);
     ++atByte;
 
     //b)
@@ -36,15 +43,15 @@ void rowData(unsigned row, unsigned rowLength, array frame, array data)
     {
         for(std::size_t i = 1; i < byteSpan -1; ++i)
         {
-            data.arr[i -1] |= frame.arr[atByte] >> 8 - offset;
-            data.arr[i] = frame.arr[atByte] << offset;
+            shiftRight(i -1, atByte, offset);
+            shiftLeft(i, atByte, offset);
             ++atByte;
         }
     }
 
     //c)
-    data.arr[byteSpan -2] |= frame.arr[atByte] >> 8 - offset;
-    data.arr[byteSpan -1] = frame.arr[atByte] << offset;
+    shiftRight(byteSpan -2, atByte, offset);
+    shiftLeft(byteSpan -1, atByte, offset);
     num::byte mask = 255 << 8 - (rowLength % 8);
     data.arr[byteSpan -1] &= mask;
 
