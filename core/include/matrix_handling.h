@@ -11,7 +11,7 @@
 #define   MATRIX_HANDLING_H
 
 
-#include "common.h" //num::byte (uint8_t) and std::size_t
+#include "common.h" //num::byte (uint8_t) and size_t (std::size_t)
 
 
 struct FrameQueue
@@ -29,12 +29,12 @@ struct array
 };
 
 
-void rowData(unsigned row, unsigned rowLength, array frame, array data);
+//All assume LSB is at right.
+    //Will pad with zeros right if needed.
+void rowData(unsigned row, unsigned rowLength, num::byte* frame, num::byte* data);
 
-
-//Parsing
-    //Pass infomation for one symbol at a time
-void parseSymbols(unsigned index, num::byte symbols[], array buffer);
+    //Pass infomation for one symbol at a time.
+void storeSymbols(unsigned index, num::byte symbols*, array buffer);
 
 void parseEffects();
 

@@ -117,7 +117,7 @@ TEST_P(MatrixDataTest, FetchRowData)
     for(std::size_t row = 0; row < dataSet->uncompressed.len / dataSet->testBuffer.len; ++row)
     {
         std::vector<uint8_t> original(dataSet->frame.arr, dataSet->frame.arr + dataSet->frame.len);
-        rowData(row, dataSet->rowLength, dataSet->frame, dataSet->testBuffer);
+        rowData(row, dataSet->rowLength, dataSet->frame.arr, dataSet->testBuffer.arr);
         ASSERT_THAT(original, testing::ElementsAreArray(dataSet->frame.arr, dataSet->frame.len))
           << "Function 'rowData' modified frame buffer!" << std::endl;
 
@@ -137,6 +137,10 @@ TEST_P(MatrixDataTest, FetchRowData)
 
 MatrixDataSet* makeMDataSet()
 {
+    /*
+     * GMock library cleans this up.
+     * 'Double free detected error' will occur if client code attempts to delete it.
+     */
     return new MatrixDataSet();
 }
 
@@ -145,7 +149,6 @@ INSTANTIATE_TEST_CASE_P(TestMatrixManipulation, MatrixDataTest,
         makeMDataSet()->dataSet
     )
 );
-
 
 
 int main(int argc, char** argv)
