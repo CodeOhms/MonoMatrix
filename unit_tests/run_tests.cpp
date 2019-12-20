@@ -113,30 +113,22 @@ TEST_P(MatrixDataTest, FetchRowData)
 {
     MatrixData* dataSet = GetParam();
 
-    std::vector<uint8_t> original(dataSet->frame.arr, dataSet->frame.arr + dataSet->frame.len);
-
     std::size_t byte = 0;
     for(std::size_t row = 0; row < dataSet->uncompressed.len / dataSet->testBuffer.len; ++row)
     {
-        for(std::size_t i = 0; i < dataSet->testBuffer.len; ++i)
+        std::vector<uint8_t> original(dataSet->frame.arr, dataSet->frame.arr + dataSet->frame.len);
+        rowData(row, dataSet->rowLength, dataSet->frame.arr, dataSet->testBuffer.arr);
+        ASSERT_THAT(original, testing::ElementsAreArray(dataSet->frame.arr, dataSet->frame.len))
+          << "Function 'rowData' modified frame buffer!" << std::endl;
+
+        std::bitset<8> expected;
+        std::bitset<8> output;
+        for(std::size_t testByte = 0; testByte < dataSet->testBuffer.len; ++testByte)
         {
-            std::bitset<8> expected;
-            expected = dataSet->uncompressed.arr[byte];
-            std::bitset<8> output;
-
-            rowData(row, dataSet->rowLength, dataSet->frame, dataSet->testBuffer);
-            ASSERT_THAT(original, testing::ElementsAreArray(
-                dataSet->frame.arr, dataSet->frame.len)
-            )
-              << "Function 'rowData' modified frame buffer!" << std::endl;
-            output = dataSet->testBuffer.arr[i];
-
-            EXPECT_EQ(dataSet->uncompressed.arr[byte], dataSet->testBuffer.arr[i])
+            EXPECT_EQ(dataSet->uncompressed.arr[byte], dataSet->testBuffer.arr[testByte])
               << "Row, byte: " << row << ", " << byte << std::endl
               << "Expected data: " << expected << std::endl
               << "Output:        " << output << std::endl;
-
-            // std::cout << output << std::endl;
 
             ++byte;
         }
@@ -145,6 +137,10 @@ TEST_P(MatrixDataTest, FetchRowData)
 
 MatrixDataSet* makeMDataSet()
 {
+    /*
+     * GMock library cleans this up.
+     * 'Double free detected error' will occur if client code attempts to delete it.
+     */
     return new MatrixDataSet();
 }
 
@@ -153,7 +149,6 @@ INSTANTIATE_TEST_CASE_P(TestMatrixManipulation, MatrixDataTest,
         makeMDataSet()->dataSet
     )
 );
-
 
 
 int main(int argc, char** argv)

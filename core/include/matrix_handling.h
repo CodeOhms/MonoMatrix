@@ -11,7 +11,7 @@
 #define   MATRIX_HANDLING_H
 
 
-#include "common.h" //num::byte (uint8_t) and std::size_t
+#include "common.h" //num::byte (uint8_t) and size_t (std::size_t)
 
 
 void rowData(unsigned row, unsigned rowLength, array frame, array data);
