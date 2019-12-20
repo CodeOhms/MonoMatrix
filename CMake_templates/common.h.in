@@ -32,4 +32,18 @@ namespace num
     #endif //MBED
 }
 
+struct FrameQueue
+{
+    num::byte   frames[FRAME_QUEUE_SIZE][FRAME_WIDTH * FRAME_HEIGHT];
+    num::byte** drawTracer;
+    num::byte** displayTracer;
+};
+
+
+struct array
+{
+    num::byte*  arr = nullptr;
+    num::size_t len = 0;
+};
+
 #endif //C_MACROS_H
