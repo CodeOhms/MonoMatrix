@@ -10,14 +10,21 @@
 #ifndef  PARSING_H
 #define  PARSING_H
 
-#include "common.h"
-
-//Pass infomation for one symbol at a time
-
-void parseSymbols(unsigned index, num::byte symbols[], array buffer);
+#include "common.hpp"
+#include "matrix_data.h"
 
 
-void parseDisplayData();
+Settings* parseSettings(Num::byte* fileBuf);
+
+
+//Pass infomation for one symbol at a time. Prepares info for SymbolGroup objects
+void parseSymbols(array fileBuf, Num::byte* symbols, Num::size_t& index, Num::byte** tracer, Num::size_t sID);
+
+
+void parseEffectsData(array fileBuf, Effects* effects, Num::size_t& index, int effectsLimit);
+
+
+// void parseDispData(array fileBuf, array rawDispData);
 
 
 #endif //PARSING_H

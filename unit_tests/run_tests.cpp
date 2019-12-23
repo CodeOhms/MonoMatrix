@@ -12,6 +12,9 @@
 #include <bitset>
 #include <vector>
 
+
+#include "../core/include/common.hpp"
+#include "../core/include/matrix_data.h"
 #include "../core/include/matrix_handling.h"
 
 
@@ -104,10 +107,7 @@ public:
     }
 };
 
-class MatrixDataTest : public testing::TestWithParam<MatrixData*>
-{
-    
-};
+class MatrixDataTest : public testing::TestWithParam<MatrixData*> { };
 
 TEST_P(MatrixDataTest, FetchRowData)
 {

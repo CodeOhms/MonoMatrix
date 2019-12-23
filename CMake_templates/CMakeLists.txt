@@ -5,5 +5,5 @@
 #  Created on: 15 Nov. 2019
 
 
-configure_file(common.h.in
-    "${ROOT_DIR}/core/include/common.h")
+configure_file(macros.h.txt
+    "${ROOT_DIR}/core/include/macros.h")

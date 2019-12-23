@@ -6,3 +6,4 @@
 
 
 add_library(CORE OBJECT "matrix_handling.cpp")
+add_library(CORE OBJECT "matrix_data.cpp")

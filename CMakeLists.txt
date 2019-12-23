@@ -36,6 +36,11 @@ if(NOT FRAME_HEIGHT)
 endif()
 message(STATUS "FRAME_HEIGHT: " ${FRAME_HEIGHT})
 
+if(NOT FRAME_RATE)
+    set(FRAME_RATE 30)
+endif()
+message(STATUS "FRAME_RATE: " ${FRAME_RATE})
+
 
 add_subdirectory(CMake_templates)
 add_subdirectory(core)
