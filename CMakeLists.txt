@@ -5,7 +5,7 @@
 #  Created on: 10 Nov. 2019
 
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.13)
 project(MonoMatrix)
 
 
@@ -41,6 +41,8 @@ if(NOT FRAME_RATE)
 endif()
 message(STATUS "FRAME_RATE: " ${FRAME_RATE})
 
+
+add_library(CORE "")
 
 add_subdirectory(CMake_templates)
 add_subdirectory(core)

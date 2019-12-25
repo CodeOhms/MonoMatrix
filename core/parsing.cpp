@@ -7,12 +7,12 @@
  */
 
 
-#include "parsing.h"
+#include "include/parsing.h"
 
 
 Settings* parseSettings(Num::byte* fileBuf)
 {
-    return new Settings(fileBuf[0], fileBuf[1], fileBuf[2], fileBuf[3], fileBuf[4]);
+    return new Settings(fileBuf[0], fileBuf[1], fileBuf[2], fileBuf[3]);
 }
 
 

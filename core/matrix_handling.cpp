@@ -12,9 +12,10 @@
 
 ////////////////////
 //Business logic
-void rowData(unsigned row, unsigned rowLength, Num::byte* frame, Num::byte* data)
+void rowData(unsigned row, unsigned rowLength, Num::byte* frame, Num::byte** data)
 {
-    Num::size_t byteSpan = (rowLength + 7)/ 8; //Rounds up. Read http://www.cs.nott.ac.uk/~psarb2/G51MPC/slides/NumberLogic.pdf
+    // Num::size_t byteSpan = (rowLength + 7)/ 8; //Rounds up. 
+    Num::size_t byteSpan = roundUp(rowLength, 8);
     Num::size_t atByte = (row * rowLength) / 8;
     Num::size_t offset = 0;
     // auto offsetCalc = [=] (Num::size_t byteIndex) -> Num::size_t {
@@ -23,15 +24,15 @@ void rowData(unsigned row, unsigned rowLength, Num::byte* frame, Num::byte* data
     // };
 
     auto shiftLeft = [&] (Num::size_t dataIndex, Num::size_t byteIndex, Num::size_t shift) -> void {
-        data[dataIndex] = frame[byteIndex] << shift;
+        *data[dataIndex] = frame[byteIndex] << shift;
     };
     auto shiftRight = [&] (Num::size_t dataIndex, Num::size_t byteIndex, Num::size_t shift) -> void {
-        data[dataIndex] |= frame[byteIndex] >> 8 - shift;
+        *data[dataIndex] |= frame[byteIndex] >> 8 - shift;
     };
 
     if(byteSpan == 1)
     {
-        data[0] = frame[atByte];
+        *data[0] = frame[atByte];
         return;
     }
 
@@ -56,18 +57,27 @@ void rowData(unsigned row, unsigned rowLength, Num::byte* frame, Num::byte* data
     shiftRight(byteSpan -2, atByte, offset);
     shiftLeft(byteSpan -1, atByte, offset);
     Num::byte mask = 255 << 8 - (rowLength % 8);
-    data[byteSpan -1] &= mask;
+    *data[byteSpan -1] &= mask;
 
     return;
 }
 
 
-void uncompress(Num::byte* dispData, Num::byte* newFrame)
+void uncompress(Properties& p, Num::byte* compressed, Num::byte* newFrame)
 {
-    for(Num::size_t row = 0; row < FRAME_HEIGHT; ++row)
+    Num::size_t rowBufferSize = roundUp(p.frameWidth, 8);
+    Num::byte** rowBuffer = new Num::byte*[rowBufferSize];
+
+    for(Num::size_t row = 0; row < p.frameHeight; ++row)
     {
-        rowData(row, FRAME_WIDTH, newFrame, dispData);
+        for(Num::size_t byte = 0; byte < rowBufferSize; ++byte)
+        {
+            rowBuffer[byte] = &newFrame[(row * rowBufferSize) +byte];
+        }
+        rowData(row, p.frameWidth, compressed, rowBuffer);
     }
+
+    delete[] rowBuffer;
 }
 
 
@@ -83,12 +93,12 @@ bool isQueueFree(FrameQueue::Queue& fQueue, Num::byte* draw)
 }
 
 
-bool plain(FrameQueue::Queue& fQueue, Num::byte* newFrame)
+bool plain(Properties& p, FrameQueue::Queue& fQueue, Num::byte* newFrame)
 {
     Num::byte* draw;
     if(isQueueFree(fQueue, draw))
     {
-        for(Num::size_t byte = 0; byte < (FRAME_WIDTH * FRAME_HEIGHT); ++byte)
+        for(Num::size_t byte = 0; byte < (p.frameWidth * p.frameHeight); ++byte)
         {
             draw[byte] = newFrame[byte];
         }
@@ -102,17 +112,17 @@ bool plain(FrameQueue::Queue& fQueue, Num::byte* newFrame)
 }
 
 
-bool scrollLeft(FrameQueue::Queue& fQueue, Num::byte* newFrame)
-{
-    Num::byte* draw;
-    if(FrameQueue::write(fQueue, draw))
-    {
-        //Scroll left
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+// bool scrollLeft(FrameQueue::Queue& fQueue, Num::byte* newFrame)
+// {
+//     Num::byte* draw;
+//     if(FrameQueue::write(fQueue, draw))
+//     {
+//         //Scroll left
+//         return true;
+//     }
+//     else
+//     {
+//         return false;
+//     }
     
-}
+// }

@@ -41,45 +41,45 @@ namespace FrameQueue
 }
 
 
-////////////////////
-//Symbols
-SymbolGroup::SymbolGroup(int w, int h, Num::byte* symbols, Num::byte** tracer) :
-  _width(w), _height(h), symbols(symbols), tracer(tracer) { }
+// ////////////////////
+// //Symbols
+// SymbolGroup::SymbolGroup(int w, int h, Num::byte* symbols, Num::byte** tracer) :
+//   _width(w), _height(h), symbols(symbols), tracer(tracer) { }
 
-SymbolGroup::~SymbolGroup()
-{
-    delete symbols;
-    delete *tracer;
-    delete tracer;
-}
+// SymbolGroup::~SymbolGroup()
+// {
+//     delete symbols;
+//     delete *tracer;
+//     delete tracer;
+// }
 
-int SymbolGroup::width()
-{
-    return _width;
-}
+// int SymbolGroup::width()
+// {
+//     return _width;
+// }
 
-int SymbolGroup::height()
-{
-    return _height;
-}
+// int SymbolGroup::height()
+// {
+//     return _height;
+// }
 
-Num::byte* SymbolGroup::getSymbol(std::size_t id)
-{
-    return tracer[id];
-}
+// Num::byte* SymbolGroup::getSymbol(std::size_t id)
+// {
+//     return tracer[id];
+// }
 
 
-Symbols::Symbols(SymbolGroup* groups, SymbolGroup** tracer) :
-  groups(groups), tracer(tracer) { }
+// Symbols::Symbols(SymbolGroup* groups, SymbolGroup** tracer) :
+//   groups(groups), tracer(tracer) { }
 
-Symbols::~Symbols()
-{
-    delete groups;
-    delete *tracer;
-    delete tracer;
-}
+// Symbols::~Symbols()
+// {
+//     delete groups;
+//     delete *tracer;
+//     delete tracer;
+// }
 
-SymbolGroup* Symbols::getSymbolGroup(std::size_t id)
-{
-    return tracer[id];
-}
+// SymbolGroup* Symbols::getSymbolGroup(std::size_t id)
+// {
+//     return tracer[id];
+// }
